@@ -58,7 +58,7 @@ S3_BUCKET = os.environ.get("S3_BUCKET", "openclaw-tenants-000000000000")
 STACK_NAME = os.environ.get("STACK_NAME", "dev")
 AWS_REGION_RUNTIME = os.environ.get("AWS_REGION", "us-east-1")
 DYNAMODB_TABLE = os.environ.get("DYNAMODB_TABLE", "openclaw-enterprise")
-DYNAMODB_REGION = "us-east-2"  # DynamoDB is in us-east-2
+DYNAMODB_REGION = os.environ.get("DYNAMODB_REGION", "us-east-2")
 
 
 def _write_usage_to_dynamodb(tenant_id: str, base_id: str, usage: dict, model: str, duration_ms: int):

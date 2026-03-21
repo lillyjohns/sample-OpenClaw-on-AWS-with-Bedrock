@@ -306,6 +306,8 @@ python3 main.py                                             # Backend on :8099
 | `AWS_REGION` | Yes | DynamoDB region (default: us-east-2) |
 | `CONSOLE_PORT` | No | Admin Console port (default: 8099) |
 | `TENANT_ROUTER_URL` | No | Tenant Router URL (default: http://localhost:8090) |
+| `DYNAMODB_TABLE` | No | DynamoDB table name (default: openclaw-enterprise) |
+| `DYNAMODB_REGION` | No | DynamoDB region for agent container (default: us-east-2) |
 
 ## Sample Organization
 

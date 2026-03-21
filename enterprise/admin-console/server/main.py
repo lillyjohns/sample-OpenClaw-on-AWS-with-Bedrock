@@ -17,7 +17,6 @@ import os
 import time
 import json
 from datetime import datetime, timezone
-from pathlib import Path
 from typing import Optional
 
 from fastapi import FastAPI, HTTPException, Header

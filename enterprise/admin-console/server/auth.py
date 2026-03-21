@@ -15,9 +15,9 @@ from dataclasses import dataclass
 # JWT secret — MUST be set via environment variable
 JWT_SECRET = os.environ.get("JWT_SECRET", "")
 if not JWT_SECRET:
-    import warnings
-    warnings.warn("JWT_SECRET not set — using insecure default. Set JWT_SECRET env var in production.")
-    JWT_SECRET = "change-me-in-production"
+    import sys
+    print("ERROR: JWT_SECRET environment variable not set. Generate one with: openssl rand -hex 32", file=sys.stderr)
+    JWT_SECRET = "dev-only-" + hashlib.sha256(os.urandom(16)).hexdigest()[:32]
 JWT_EXPIRY_HOURS = 24
 
 
