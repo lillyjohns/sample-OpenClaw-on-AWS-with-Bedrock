@@ -24,8 +24,10 @@ Before deploying anything, set a $1 billing alert so you're notified immediately
 aws budgets create-budget \
   --account-id $(aws sts get-caller-identity --query Account --output text) \
   --budget '{"BudgetName":"alert-1usd","BudgetType":"COST","TimeUnit":"MONTHLY","BudgetLimit":{"Amount":"1","Unit":"USD"}}' \
-  --notifications-with-subscribers '[{"Notification":{"NotificationType":"ACTUAL","ComparisonOperator":"GREATER_THAN","Threshold":50},"Subscribers":[{"SubscriptionType":"EMAIL","Address":"YOUR_EMAIL"}]}]'
+  --notifications-with-subscribers '[{"Notification":{"NotificationType":"ACTUAL","ComparisonOperator":"GREATER_THAN","Threshold":1},"Subscribers":[{"SubscriptionType":"EMAIL","Address":"YOUR_EMAIL"}]}]'
 ```
+
+> This sends an email the moment your charges exceed **$0.01** (1% of $1 budget). Replace `YOUR_EMAIL` with your email address.
 
 > ⚠️ **When using Kiro:** Never press `t` (trust all) — always review each action with `y` or `n`. Kiro asks before every AWS CLI call.
 
