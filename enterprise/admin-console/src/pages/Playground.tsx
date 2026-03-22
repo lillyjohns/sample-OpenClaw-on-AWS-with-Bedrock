@@ -43,8 +43,26 @@ export default function Playground() {
         setMessages(prev => [...prev, assistantMsg]);
         setLastPlanE(data.plan_e);
       },
-      onError: () => {
-        setMessages(prev => [...prev, { role: 'assistant', content: '⚠️ Error communicating with agent', timestamp: new Date().toLocaleTimeString() }]);
+      onError: (err) => {
+        const errMsg = mode === 'live'
+          ? '⚠️ AgentCore cold start may take ~25s on first request. Retrying automatically...'
+          : '⚠️ Error communicating with agent';
+        setMessages(prev => [...prev, { role: 'assistant', content: errMsg, timestamp: new Date().toLocaleTimeString() }]);
+        // Auto-retry once for live mode (cold start)
+        if (mode === 'live') {
+          setTimeout(() => {
+            sendMut.mutate({ tenant_id: tenantId, message: inputValue, mode }, {
+              onSuccess: (data) => {
+                const retryMsg: ChatMessage = { role: 'assistant', content: data.response, timestamp: new Date().toLocaleTimeString() };
+                setMessages(prev => [...prev, retryMsg]);
+                setLastPlanE(data.plan_e);
+              },
+              onError: () => {
+                setMessages(prev => [...prev, { role: 'assistant', content: '⚠️ AgentCore still starting up. Please try again in 30 seconds.', timestamp: new Date().toLocaleTimeString() }]);
+              },
+            });
+          }, 5000);
+        }
       },
     });
   };
