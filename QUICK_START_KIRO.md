@@ -99,6 +99,11 @@ https://github.com/aws-samples/sample-OpenClaw-on-AWS-with-Bedrock
 I have already deployed the CloudFormation stack named openclaw-bedrock
 in us-east-1. Please help me configure the Telegram communication channel
 for OpenClaw using this token: <YOUR_BOT_TOKEN>
+
+Important: OpenClaw is installed under the ubuntu user via NVM.
+When running commands via SSM, always use:
+sudo -u ubuntu bash -c 'export NVM_DIR="/home/ubuntu/.nvm" && source $NVM_DIR/nvm.sh && openclaw <command>'
+or use the wrapper: sudo -u ubuntu /usr/local/bin/openclaw <command>
 ```
 
 Kiro will automatically connect to your EC2 via SSM and configure the Telegram bot. Wait for it to complete.
