@@ -41,9 +41,9 @@ aws budgets create-budget \
 
 ### 📥 Step 1a: Download the Template
 
-👉 **[Download clawdbot-bedrock.yaml](https://raw.githubusercontent.com/lillyjohns/sample-OpenClaw-on-AWS-with-Bedrock/main/clawdbot-bedrock.yaml)**
+👉 **[Download openclaw-bedrock.yaml](https://raw.githubusercontent.com/lillyjohns/sample-OpenClaw-on-AWS-with-Bedrock/main/openclaw-bedrock.yaml)**
 
-> Right-click the link → **Save Link As** → save as `clawdbot-bedrock.yaml`
+> Right-click the link → **Save Link As** → save as `openclaw-bedrock.yaml`
 
 ---
 
@@ -51,7 +51,7 @@ aws budgets create-budget \
 
 1. Go to [CloudFormation Console (us-east-1)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create)
 2. Select **"Upload a template file"**
-3. Click **"Choose file"** → select the downloaded `clawdbot-bedrock.yaml`
+3. Click **"Choose file"** → select the downloaded `openclaw-bedrock.yaml`
 4. Click **"Next"**
 
 > ⚠️ **Tested region: `us-east-1` (US East - N. Virginia)**
