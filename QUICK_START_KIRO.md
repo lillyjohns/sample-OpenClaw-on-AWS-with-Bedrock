@@ -92,17 +92,9 @@ kiro-cli chat
 Paste this prompt — replace `<YOUR_BOT_TOKEN>` with your token from Step 0:
 
 ```
-Today you are my assistant to deploy openclaw from github
-https://github.com/aws-samples/sample-OpenClaw-on-AWS-with-Bedrock
-
-I have already deployed the CloudFormation stack named openclaw-bedrock
-in us-east-1. Please help me configure the Telegram communication channel
-for OpenClaw using this token: <YOUR_BOT_TOKEN>
-
-Important: OpenClaw is installed under the ubuntu user via NVM.
-When running commands via SSM, always use:
-sudo -u ubuntu bash -c 'export NVM_DIR="/home/ubuntu/.nvm" && source $NVM_DIR/nvm.sh && openclaw <command>'
-or use the wrapper: sudo -u ubuntu /usr/local/bin/openclaw <command>
+I deployed the CloudFormation stack "openclaw-bedrock" in us-east-1.
+Configure the Telegram channel for OpenClaw with this bot token: <YOUR_BOT_TOKEN>
+OpenClaw is installed under the ubuntu user via NVM — run all openclaw commands as ubuntu.
 ```
 
 Kiro will automatically connect to your EC2 via SSM and configure the Telegram bot. Wait for it to complete.
@@ -163,12 +155,9 @@ Show me the openclaw channel status
   3. In Kiro (CloudShell), paste this prompt to switch OpenClaw to OpenRouter:
 
 ```
-Add OpenRouter API key sk-or-v1-xxx to my config by setting env.OPENROUTER_API_KEY
-in ~/.openclaw/openclaw.json using a Python one-liner (no newlines).
-Then set primary model to openrouter/stepfun/step-3.5-flash:free and restart the gateway.
-
-Important: run all commands as ubuntu user:
-sudo -u ubuntu bash -c 'export NVM_DIR="/home/ubuntu/.nvm" && source $NVM_DIR/nvm.sh && <command>'
+Add OpenRouter API key sk-or-v1-xxx to ~/.openclaw/openclaw.json as env.OPENROUTER_API_KEY,
+set primary model to openrouter/stepfun/step-3.5-flash:free, then restart the openclaw gateway.
+Run all commands as the ubuntu user.
 ```
 
   > 💡 OpenRouter free tier includes models like **Step 3.5 Flash** (Stepfun) at $0 cost — great fallback when Bedrock is throttled.
