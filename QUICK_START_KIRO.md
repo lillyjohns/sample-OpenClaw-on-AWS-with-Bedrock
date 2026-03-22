@@ -1,8 +1,6 @@
 # Quick Start Guide
 
-> This repository is a modified version of [aws-samples/sample-OpenClaw-on-AWS-with-Bedrock](https://github.com/aws-samples/sample-OpenClaw-on-AWS-with-Bedrock), adapted for a specific workshop event. Changes include: Free plan–friendly defaults (`c7i-flex.large`, VPC endpoints disabled) and a simplified setup flow using Kiro CLI in AWS CloudShell — no local software installation required.
-
-> Deploy OpenClaw on AWS using CloudFormation, then configure it with Kiro AI in AWS CloudShell — no software to install on your computer.
+> This repository is a modified version of [aws-samples/sample-OpenClaw-on-AWS-with-Bedrock](https://github.com/aws-samples/sample-OpenClaw-on-AWS-with-Bedrock), adapted for a specific workshop event. Changes include: Free plan–friendly defaults (`c7i-flex.large`, VPC endpoints disabled) and a simplified setup flow using Kiro CLI installed directly on the EC2 instance.
 
 ## Prerequisites
 
@@ -20,7 +18,7 @@
 Before deploying anything, set a $1 billing alert so you're notified immediately if any charges appear:
 
 1. Go to [Billing Console](https://console.aws.amazon.com/billing/home#/preferences) → enable **"Receive Billing Alerts"** → Save
-2. Then in CloudShell, run:
+2. Open **CloudShell** (top bar `>_` icon) and run:
 
 ```bash
 aws budgets create-budget \
@@ -29,9 +27,9 @@ aws budgets create-budget \
   --notifications-with-subscribers '[{"Notification":{"NotificationType":"ACTUAL","ComparisonOperator":"GREATER_THAN","Threshold":1},"Subscribers":[{"SubscriptionType":"EMAIL","Address":"YOUR_EMAIL"}]}]'
 ```
 
-> This sends an email the moment your charges exceed **$0.01** (1% of $1 budget). Replace `YOUR_EMAIL` with your email address.
+> This sends an email the moment your charges exceed **$0.01**. Replace `YOUR_EMAIL` with your email address.
 
-> ⚠️ **When using Kiro:** Never press `t` (trust all) — always review each action with `y` or `n`. Kiro asks before every AWS CLI call.
+> ⚠️ **When using Kiro:** Never press `t` (trust all) — always review each action with `y` or `n`.
 
 > ⚠️ **Delete the stack** when you're done with the workshop to avoid ongoing charges.
 
@@ -58,7 +56,7 @@ aws budgets create-budget \
 
 ### Step 1c: Set Stack Parameters
 
-All defaults are pre-configured for Free Tier. Just set the **stack name** and click through:
+All defaults are pre-configured. Just verify and click through:
 
 | Parameter | Default | Note |
 |---|---|---|
@@ -77,20 +75,27 @@ Stack is ready when status shows `CREATE_COMPLETE` ✅
 
 ---
 
-## Step 2: Open AWS CloudShell
+## Step 2: Connect to EC2 via Session Manager
 
-Once the stack is `CREATE_COMPLETE`:
+1. Go to **EC2 → Instances** → select `openclaw-bedrock` instance
+2. Click **Connect → Session Manager → Connect**
+3. Switch to the ubuntu user:
 
-1. In the AWS Console top bar, click the **CloudShell icon** (terminal icon `>_`)
-2. Wait for the shell to initialize (~30 seconds)
-
-> 💡 **CloudShell is free** and has AWS CLI pre-installed. No setup needed.
+```bash
+sudo -u ubuntu -i
+```
 
 ---
 
-## Step 3: Login to Kiro in CloudShell
+## Step 3: Install and Login to Kiro
 
-In the CloudShell terminal, run:
+Install Kiro CLI on the EC2 instance:
+
+```bash
+curl -fsSL https://cli.kiro.dev/install | bash
+```
+
+Then login with your **AWS Builder ID**:
 
 ```bash
 kiro-cli login
@@ -100,28 +105,22 @@ When prompted, select **"AWS Builder ID"** and follow the steps:
 
 1. A URL will appear — open it in your browser
 2. Sign in with your **AWS Builder ID** (free signup at [profile.aws.amazon.com](https://profile.aws.amazon.com/))
-3. Enter the verification code shown in CloudShell
-4. Return to CloudShell — you should see `Login successful`
+3. Enter the verification code shown in the terminal
+4. You should see `Login successful`
 
-> 💡 **Don't have an AWS Builder ID?** It's separate from your AWS account — just an email signup, completely free.
-
-> 💡 **CloudShell not available in your region?** Install Kiro CLI directly on the EC2 instance instead:
-> 1. Go to **EC2 → Instances** → select your instance → **Connect → Session Manager → Connect**
-> 2. Switch to ubuntu user: `sudo -u ubuntu -i`
-> 3. Install Kiro: `curl -fsSL https://cli.kiro.dev/install | bash`
-> 4. Then run `kiro-cli login` as normal
+> 💡 **AWS Builder ID** is separate from your AWS account — just a free email signup.
 
 ---
 
 ## Step 4: Configure Telegram via Kiro
 
-In CloudShell, start a Kiro chat session:
+Start a Kiro chat session:
 
 ```bash
 kiro-cli chat
 ```
 
-Paste this prompt — replace `<YOUR_BOT_TOKEN>` with your token from Step 0:
+Paste this prompt — replace `<YOUR_BOT_TOKEN>` with your token from BotFather:
 
 ```
 I deployed the CloudFormation stack "openclaw-bedrock" in us-east-1.
@@ -129,7 +128,7 @@ Configure the Telegram channel for OpenClaw with this bot token: <YOUR_BOT_TOKEN
 OpenClaw is installed under the ubuntu user via NVM — run all openclaw commands as ubuntu.
 ```
 
-Kiro will automatically connect to your EC2 via SSM and configure the Telegram bot. Wait for it to complete.
+Kiro will configure the Telegram bot automatically. Wait for it to complete.
 
 ---
 
@@ -137,7 +136,7 @@ Kiro will automatically connect to your EC2 via SSM and configure the Telegram b
 
 1. Open Telegram → find your bot → send `/start`
 2. The bot replies with a **pairing code** and your **Telegram user ID**
-3. Back in Kiro (CloudShell), enter:
+3. Back in Kiro, enter:
 
 ```
 Please approve the OpenClaw session with the following details:
@@ -155,18 +154,13 @@ Send your Telegram bot: `What's the weather in Bangkok?`
 
 It should reply within 10 seconds. ✅
 
-You can also check channel status via Kiro:
-```
-Show me the openclaw channel status
-```
-
 ---
 
 ## 💰 Estimated Costs
 
 | Component | Monthly Cost |
 |---|---|
-| EC2 `c7i-flex.large` | ~$61/month | Stop when not in use to save cost |
+| EC2 `c7i-flex.large` | ~$61/month |
 | EBS 30GB | ~$2.40 |
 | VPC Endpoints | $0 (disabled) |
 | Bedrock Nova Lite (moderate use) | ~$2–5 |
@@ -179,12 +173,11 @@ Show me the openclaw channel status
 ## Troubleshooting
 
 **Bedrock API throttling / "Too many requests" error**
-- AWS Bedrock has per-account rate limits, especially on new accounts
 - Free alternative: use [OpenRouter](https://openrouter.ai) which provides free model access ($0 limit tier)
 
   1. Go to [openrouter.ai](https://openrouter.ai) → Sign up (GitHub or email)
   2. Go to **Keys** → **Create Key** → copy your `sk-or-v1-xxx` key
-  3. In Kiro (CloudShell), paste this prompt to switch OpenClaw to OpenRouter:
+  3. In Kiro, paste this prompt:
 
 ```
 Add OpenRouter API key sk-or-v1-xxx to ~/.openclaw/openclaw.json as env.OPENROUTER_API_KEY,
@@ -192,7 +185,7 @@ set primary model to openrouter/stepfun/step-3.5-flash:free, then restart the op
 Run all commands as the ubuntu user.
 ```
 
-  > 💡 OpenRouter free tier includes models like **Step 3.5 Flash** (Stepfun) at $0 cost — great fallback when Bedrock is throttled.
+> 💡 OpenRouter free tier includes models like **Step 3.5 Flash** (Stepfun) at $0 cost — great fallback when Bedrock is throttled.
 
 ---
 
@@ -200,4 +193,3 @@ Run all commands as the ubuntu user.
 
 - [Kiro](https://kiro.dev/) · [Kiro Docs](https://kiro.dev/docs/)
 - [OpenClaw Docs](https://docs.openclaw.ai/)
-- [Full Deployment Guide](DEPLOYMENT.md) · [Troubleshooting](TROUBLESHOOTING.md)
