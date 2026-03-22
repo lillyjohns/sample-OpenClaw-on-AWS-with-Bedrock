@@ -154,10 +154,6 @@ Show me the openclaw channel status
 
 ## Troubleshooting
 
-**Bot not responding after pairing**
-- In CloudShell: `aws ssm start-session --target <INSTANCE_ID> --region us-east-1`
-- Then check: `systemctl status openclaw` and `journalctl -u openclaw -n 30`
-
 **Bedrock API throttling / "Too many requests" error**
 - AWS Bedrock has per-account rate limits, especially on new accounts
 - Free alternative: use [OpenRouter](https://openrouter.ai) which provides free model access ($0 limit tier)
