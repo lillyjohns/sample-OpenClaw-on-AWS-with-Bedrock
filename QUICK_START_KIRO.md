@@ -9,6 +9,28 @@
 
 > 📌 **Get a Telegram bot token first:** Open Telegram → search **@BotFather** → send `/newbot` → follow prompts → copy the token. Takes 2 minutes.
 
+> 💡 **Tip:** Create a **fresh AWS account** for the workshop to get the full 12-month Free Tier + Bedrock credits, regardless of your existing account age.
+
+---
+
+## ⚠️ Set a Billing Alarm First
+
+Before deploying anything, set a $1 billing alert so you're notified immediately if any charges appear:
+
+1. Go to [Billing Console](https://console.aws.amazon.com/billing/home#/preferences) → enable **"Receive Billing Alerts"** → Save
+2. Then in CloudShell, run:
+
+```bash
+aws budgets create-budget \
+  --account-id $(aws sts get-caller-identity --query Account --output text) \
+  --budget '{"BudgetName":"alert-1usd","BudgetType":"COST","TimeUnit":"MONTHLY","BudgetLimit":{"Amount":"1","Unit":"USD"}}' \
+  --notifications-with-subscribers '[{"Notification":{"NotificationType":"ACTUAL","ComparisonOperator":"GREATER_THAN","Threshold":50},"Subscribers":[{"SubscriptionType":"EMAIL","Address":"YOUR_EMAIL"}]}]'
+```
+
+> ⚠️ **When using Kiro:** Never press `t` (trust all) — always review each action with `y` or `n`. Kiro asks before every AWS CLI call.
+
+> ⚠️ **Delete the stack** when you're done with the workshop to avoid ongoing charges.
+
 ---
 
 ## Step 1: Launch the CloudFormation Stack
