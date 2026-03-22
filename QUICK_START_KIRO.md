@@ -156,21 +156,9 @@ Show me the openclaw channel status
 
 ## Troubleshooting
 
-**Stack creation failed**
-- Most common: Bedrock model not enabled
-- Fix: [Bedrock Console](https://console.aws.amazon.com/bedrock/) → Model Access → enable Nova 2 Lite → retry stack
-
-**`kiro-cli` not found in CloudShell**
-- CloudShell may need to be refreshed: close and reopen
-- Try: `which kiro-cli` to verify installation path
-
 **Bot not responding after pairing**
 - In CloudShell: `aws ssm start-session --target <INSTANCE_ID> --region us-east-1`
 - Then check: `systemctl status openclaw` and `journalctl -u openclaw -n 30`
-
-**`c7i-flex.large` not available**
-- Confirm you're in `us-east-1`
-- Fallback: use `t3.medium` (also Free Tier eligible)
 
 **Bedrock API throttling / "Too many requests" error**
 - AWS Bedrock has per-account rate limits, especially on new accounts
