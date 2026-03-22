@@ -172,6 +172,25 @@ Show me the openclaw channel status
 - Confirm you're in `us-east-1`
 - Fallback: use `t3.medium` (also Free Tier eligible)
 
+**Bedrock API throttling / "Too many requests" error**
+- AWS Bedrock has per-account rate limits, especially on new accounts
+- Free alternative: use [OpenRouter](https://openrouter.ai) which provides free model access ($0 limit tier)
+
+  1. Go to [openrouter.ai](https://openrouter.ai) → Sign up (GitHub or email)
+  2. Go to **Keys** → **Create Key** → copy your `sk-or-v1-xxx` key
+  3. In Kiro (CloudShell), paste this prompt to switch OpenClaw to OpenRouter:
+
+```
+Add OpenRouter API key sk-or-v1-xxx to my config by setting env.OPENROUTER_API_KEY
+in ~/.openclaw/openclaw.json using a Python one-liner (no newlines).
+Then set primary model to openrouter/stepfun/step-3.5-flash:free and restart the gateway.
+
+Important: run all commands as ubuntu user:
+sudo -u ubuntu bash -c 'export NVM_DIR="/home/ubuntu/.nvm" && source $NVM_DIR/nvm.sh && <command>'
+```
+
+  > 💡 OpenRouter free tier includes models like **Step 3.5 Flash** (Stepfun) at $0 cost — great fallback when Bedrock is throttled.
+
 ---
 
 ## Learn More
