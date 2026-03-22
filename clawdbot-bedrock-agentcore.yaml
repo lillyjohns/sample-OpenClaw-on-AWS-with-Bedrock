@@ -35,7 +35,7 @@ Parameters:
   InstanceType:
     Type: String
     Default: "c7g.large"
-    Description: "Graviton (ARM) recommended for 20-40% better price-performance. x86 also supported."
+    Description: "Graviton (ARM) recommended for 20-40% better price-performance. x86 also supported. Use c7i-flex.large for AWS Free Tier eligible accounts."
     AllowedValues:
       - "t4g.small"
       - "t4g.medium"
@@ -47,6 +47,7 @@ Parameters:
       - "t3.medium"
       - "t3.large"
       - "c5.xlarge"
+      - "c7i-flex.large"
 
   KeyPairName:
     Type: AWS::EC2::KeyPair::KeyName
