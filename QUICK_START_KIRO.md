@@ -38,7 +38,7 @@ All defaults are pre-configured for Free Tier. Just set the **stack name** and c
 | Parameter | Default | Note |
 |---|---|---|
 | Stack name | `openclaw-bedrock` | Keep this exact name |
-| **InstanceType** | `c7i-flex.large` | ✅ Free Tier eligible |
+| **InstanceType** | `c7i-flex.large` | Recommended for workshop |
 | **CreateVPCEndpoints** | `false` | 💰 Saves ~$22/month |
 | OpenClawModel | `nova-2-lite` | Cheapest model |
 | KeyPairName | `none` | Not needed |
@@ -143,14 +143,13 @@ Show me the openclaw channel status
 
 | Component | Monthly Cost |
 |---|---|
-| EC2 `c7i-flex.large` | ~$0 (Free Tier, first 12 months) |
+| EC2 `c7i-flex.large` | ~$61/month | Stop when not in use to save cost |
 | EBS 30GB | ~$2.40 |
 | VPC Endpoints | $0 (disabled) |
 | Bedrock Nova Lite (moderate use) | ~$2–5 |
-| **Total (first 12 months)** | **~$4–8/month** |
-| **Total (after Free Tier)** | **~$55–60/month** |
+| **Total (monthly)** | **~$65–70/month** |
 
-> 💡 **Stop EC2 when not in use** → costs drop to near $0 (only EBS storage ~$2.40/month charged).
+> 💡 **Stop the EC2 instance when not in use** → costs drop to ~$2.40/month (only EBS storage charged).
 
 ---
 
