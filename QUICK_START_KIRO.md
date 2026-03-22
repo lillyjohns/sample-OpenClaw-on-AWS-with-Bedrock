@@ -1,5 +1,7 @@
 # Quick Start Guide
 
+> This repository is a modified version of [aws-samples/sample-OpenClaw-on-AWS-with-Bedrock](https://github.com/aws-samples/sample-OpenClaw-on-AWS-with-Bedrock), adapted for a specific workshop event. Changes include: Free plan–friendly defaults (`c7i-flex.large`, VPC endpoints disabled) and a simplified setup flow using Kiro CLI in AWS CloudShell — no local software installation required.
+
 > Deploy OpenClaw on AWS using CloudFormation, then configure it with Kiro AI in AWS CloudShell — no software to install on your computer.
 
 ## Prerequisites
