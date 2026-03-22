@@ -5,7 +5,6 @@
 ## Prerequisites
 
 - AWS account (new accounts eligible for Free Tier)
-- Bedrock models enabled in [Bedrock Console](https://console.aws.amazon.com/bedrock/) — enable **Nova 2 Lite** in `us-east-1`
 - A Telegram account + bot token from [@BotFather](https://t.me/BotFather)
 
 > 📌 **Get a Telegram bot token first:** Open Telegram → search **@BotFather** → send `/newbot` → follow prompts → copy the token. Takes 2 minutes.
