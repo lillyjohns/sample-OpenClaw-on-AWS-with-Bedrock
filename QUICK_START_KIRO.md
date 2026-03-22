@@ -12,15 +12,24 @@
 
 ## Step 1: Launch the CloudFormation Stack
 
-Launch in **us-east-1 (N. Virginia)** — the recommended and tested region:
+### 📥 Step 1a: Download the Template
 
-[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/review?stackName=openclaw-bedrock&templateURL=https://sharefile-jiade.s3.cn-northwest-1.amazonaws.com.cn/clawdbot-bedrock.yaml)
+👉 **[Download clawdbot-bedrock.yaml](https://raw.githubusercontent.com/lillyjohns/sample-OpenClaw-on-AWS-with-Bedrock/main/clawdbot-bedrock.yaml)**
+
+> Right-click the link → **Save Link As** → save as `clawdbot-bedrock.yaml`
+
+This version includes `c7i-flex.large` in the instance dropdown for Free Tier accounts.
+
+---
+
+### 🚀 Step 1b: Upload to CloudFormation
+
+1. Go to [CloudFormation Console (us-east-1)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create)
+2. Select **"Upload a template file"**
+3. Click **"Choose file"** → select the downloaded `clawdbot-bedrock.yaml`
+4. Click **"Next"**
 
 > ⚠️ **Tested region: `us-east-1` (US East - N. Virginia)**. Other regions may work but are not guaranteed.
-
-> 📌 **If the Launch Stack button shows a template error**, use the manual method:
-> 1. Download: [clawdbot-bedrock.yaml](https://raw.githubusercontent.com/lillyjohns/sample-OpenClaw-on-AWS-with-Bedrock/main/clawdbot-bedrock.yaml)
-> 2. Go to [CloudFormation Console](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create) → **Upload a template file** → select the downloaded YAML
 
 ### Recommended Parameters
 
