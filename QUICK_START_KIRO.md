@@ -1,12 +1,14 @@
 # Quick Start Guide
 
-> Deploy OpenClaw on AWS using CloudFormation, then optionally use Kiro AI to configure it — no commands to remember.
+> Deploy OpenClaw on AWS using CloudFormation, then configure it with Kiro AI in AWS CloudShell — no software to install on your computer.
 
 ## Prerequisites
 
 - AWS account (new accounts eligible for Free Tier)
-- Bedrock models enabled in [Bedrock Console](https://console.aws.amazon.com/bedrock/) — enable **Nova 2 Lite** or **Claude Haiku** in `us-east-1`
-- A Telegram account
+- Bedrock models enabled in [Bedrock Console](https://console.aws.amazon.com/bedrock/) — enable **Nova 2 Lite** in `us-east-1`
+- A Telegram account + bot token from [@BotFather](https://t.me/BotFather)
+
+> 📌 **Get a Telegram bot token first:** Open Telegram → search **@BotFather** → send `/newbot` → follow prompts → copy the token. Takes 2 minutes.
 
 ---
 
@@ -18,8 +20,6 @@
 
 > Right-click the link → **Save Link As** → save as `clawdbot-bedrock.yaml`
 
-This version includes `c7i-flex.large` in the instance dropdown for Free Tier accounts.
-
 ---
 
 ### 🚀 Step 1b: Upload to CloudFormation
@@ -29,98 +29,79 @@ This version includes `c7i-flex.large` in the instance dropdown for Free Tier ac
 3. Click **"Choose file"** → select the downloaded `clawdbot-bedrock.yaml`
 4. Click **"Next"**
 
-> ⚠️ **Tested region: `us-east-1` (US East - N. Virginia)**. Other regions may work but are not guaranteed.
+> ⚠️ **Tested region: `us-east-1` (US East - N. Virginia)**
 
-### Recommended Parameters
+### Step 1c: Set Stack Parameters
 
-When the CloudFormation parameters page loads, set these values:
+All defaults are pre-configured for Free Tier. Just set the **stack name** and click through:
 
-| Parameter | Recommended Value | Reason |
+| Parameter | Default | Note |
 |---|---|---|
-| **InstanceType** | `c7i-flex.large` | ✅ Free Tier eligible on new AWS accounts |
-| **CreateVPCEndpoints** | `false` | 💰 Saves ~$22/month — not needed for basic use |
-| **OpenClawModel** | `global.amazon.nova-2-lite-v1:0` | 💰 Cheapest model, great for getting started |
-| **KeyPairName** | `none` | SSM handles access — no SSH key needed |
-| **EnableSandbox** | `true` | Required for Docker-based tools |
+| Stack name | `openclaw-bedrock` | Keep this exact name |
+| **InstanceType** | `c7i-flex.large` | ✅ Free Tier eligible |
+| **CreateVPCEndpoints** | `false` | 💰 Saves ~$22/month |
+| OpenClawModel | `nova-2-lite` | Cheapest model |
+| KeyPairName | `none` | Not needed |
 
-> 💡 **Why `c7i-flex.large`?** New AWS accounts get 750 free hours/month of eligible EC2 instances. `c7i-flex.large` is x86 (amd64) and qualifies, making your first month essentially free.
+**Click "Next" → "Next" → check acknowledgement box → "Create Stack"**
 
-> ⚠️ **`c7i-flex.large` not in the dropdown?** The CloudFormation template may show a limited instance list. Simply **clear the field and type `c7i-flex.large` manually** — CloudFormation accepts it even if not in the dropdown. If the field rejects it, select `t3.medium` as a Free Tier alternative.
+### Step 1d: Wait ~8 minutes
 
-> 💡 **Why disable VPC Endpoints?** They add ~$22/month per endpoint for private Bedrock access. For workshops and personal use, the public Bedrock endpoint works perfectly and is HTTPS-encrypted.
-
-### Click "Create Stack" and wait ~8 minutes
-
-Monitor progress in **CloudFormation → Stacks → openclaw-bedrock → Events**.  
+Monitor in **CloudFormation → Stacks → openclaw-bedrock → Events**.
 Stack is ready when status shows `CREATE_COMPLETE` ✅
 
 ---
 
-## Step 2: Get Your Gateway Token
+## Step 2: Open AWS CloudShell
 
-Once the stack is complete, retrieve your token from SSM Parameter Store:
+Once the stack is `CREATE_COMPLETE`:
 
-```bash
-aws ssm get-parameter \
-  --name /openclaw/openclaw-bedrock/gateway-token \
-  --with-decryption \
-  --query Parameter.Value \
-  --output text \
-  --region us-east-1
-```
+1. In the AWS Console top bar, click the **CloudShell icon** (terminal icon `>_`)
+2. Wait for the shell to initialize (~30 seconds)
 
-Save this token — you'll need it to connect via Kiro.
+> 💡 **CloudShell is free** and has AWS CLI pre-installed. No setup needed.
 
 ---
 
-## Step 3: Install Kiro on Your EC2 Instance
+## Step 3: Login to Kiro in CloudShell
 
-Connect to your instance via SSM Session Manager:
-
-1. Go to **EC2 → Instances** → select `openclaw-bedrock` instance
-2. Click **Connect → Session Manager → Connect**
-
-In the terminal, install Kiro CLI:
+In the CloudShell terminal, run:
 
 ```bash
-# Download and install Kiro CLI
-curl -fsSL https://kiro.dev/install.sh | bash
-
-# Verify installation
-kiro --version
+kiro-cli login
 ```
 
-Or install via npm:
-```bash
-npm install -g @kiro/cli
-```
+When prompted, select **"AWS Builder ID"** and follow the steps:
 
-Launch Kiro:
-```bash
-kiro
-```
+1. A URL will appear — open it in your browser
+2. Sign in with your **AWS Builder ID** (free signup at [profile.aws.amazon.com](https://profile.aws.amazon.com/))
+3. Enter the verification code shown in CloudShell
+4. Return to CloudShell — you should see `Login successful`
 
-Sign in with your **AWS Builder ID** (free — just an email signup at [builder.aws](https://profile.aws.amazon.com/)) when prompted.
+> 💡 **Don't have an AWS Builder ID?** It's separate from your AWS account — just an email signup, completely free.
 
 ---
 
 ## Step 4: Configure Telegram via Kiro
 
-In the Kiro chat session, paste this prompt — replace `<YOUR_BOT_TOKEN>` with your token from [@BotFather](https://t.me/BotFather):
+In CloudShell, start a Kiro chat session:
+
+```bash
+kiro-cli chat
+```
+
+Paste this prompt — replace `<YOUR_BOT_TOKEN>` with your token from Step 0:
 
 ```
-Today you are my assistant to deploy openclaw from github 
+Today you are my assistant to deploy openclaw from github
 https://github.com/aws-samples/sample-OpenClaw-on-AWS-with-Bedrock
 
-I have already deployed the CloudFormation stack named openclaw-bedrock 
-in us-east-1. Please help me configure the Telegram communication channel 
+I have already deployed the CloudFormation stack named openclaw-bedrock
+in us-east-1. Please help me configure the Telegram communication channel
 for OpenClaw using this token: <YOUR_BOT_TOKEN>
 ```
 
-Kiro will automatically run the necessary commands to configure your Telegram bot.
-
-> 📌 **Don't have a bot token yet?**  
-> Open Telegram → search **@BotFather** → send `/newbot` → follow prompts → copy the token.
+Kiro will automatically connect to your EC2 via SSM and configure the Telegram bot. Wait for it to complete.
 
 ---
 
@@ -128,7 +109,7 @@ Kiro will automatically run the necessary commands to configure your Telegram bo
 
 1. Open Telegram → find your bot → send `/start`
 2. The bot replies with a **pairing code** and your **Telegram user ID**
-3. Back in Kiro, enter:
+3. Back in Kiro (CloudShell), enter:
 
 ```
 Please approve the OpenClaw session with the following details:
@@ -136,21 +117,20 @@ Telegram user ID: <YOUR_USER_ID>
 Pairing code: <YOUR_PAIRING_CODE>
 ```
 
-Once approved, your bot is live! 🎉
+Once approved — your bot is live! 🎉
 
 ---
 
 ## Verification
 
-Your Telegram channel status should show:
+Send your Telegram bot: `What's the weather in Bangkok?`
 
-| Field | Value |
-|---|---|
-| Status | Enabled ✅ |
-| State | Running ✅ |
-| Mode | Polling ✅ |
+It should reply within 10 seconds. ✅
 
-Test it by sending your bot: `What's the weather in Bangkok?`
+You can also check channel status via Kiro:
+```
+Show me the openclaw channel status
+```
 
 ---
 
@@ -158,34 +138,34 @@ Test it by sending your bot: `What's the weather in Bangkok?`
 
 | Component | Monthly Cost |
 |---|---|
-| EC2 `c7i-flex.large` | ~$0 (Free Tier) / ~$50 after 12 months |
+| EC2 `c7i-flex.large` | ~$0 (Free Tier, first 12 months) |
 | EBS 30GB | ~$2.40 |
 | VPC Endpoints | $0 (disabled) |
 | Bedrock Nova Lite (moderate use) | ~$2–5 |
 | **Total (first 12 months)** | **~$4–8/month** |
 | **Total (after Free Tier)** | **~$55–60/month** |
 
-> 💡 **Stop the EC2 instance when not in use** → costs drop to near $0 (only EBS storage charged).
+> 💡 **Stop EC2 when not in use** → costs drop to near $0 (only EBS storage ~$2.40/month charged).
 
 ---
 
 ## Troubleshooting
 
 **Stack creation failed**
-- Check CloudFormation Events tab for the specific error
-- Most common: Bedrock model not enabled → go to Bedrock Console → Model Access → enable Nova 2 Lite
+- Most common: Bedrock model not enabled
+- Fix: [Bedrock Console](https://console.aws.amazon.com/bedrock/) → Model Access → enable Nova 2 Lite → retry stack
 
-**Bot not responding**
-- Check openclaw service: in SSM terminal run `systemctl status openclaw`
-- Check logs: `journalctl -u openclaw -n 50`
+**`kiro-cli` not found in CloudShell**
+- CloudShell may need to be refreshed: close and reopen
+- Try: `which kiro-cli` to verify installation path
+
+**Bot not responding after pairing**
+- In CloudShell: `aws ssm start-session --target <INSTANCE_ID> --region us-east-1`
+- Then check: `systemctl status openclaw` and `journalctl -u openclaw -n 30`
 
 **`c7i-flex.large` not available**
-- Some regions don't support `c7i-flex` — use `t3.medium` as fallback (also Free Tier eligible)
 - Confirm you're in `us-east-1`
-
-**Kiro not found after install**
-- Run `source ~/.bashrc` or start a new terminal session
-- Or use full path: `~/.local/bin/kiro`
+- Fallback: use `t3.medium` (also Free Tier eligible)
 
 ---
 
