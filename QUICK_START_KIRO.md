@@ -36,6 +36,8 @@ When the CloudFormation parameters page loads, set these values:
 
 > 💡 **Why `c7i-flex.large`?** New AWS accounts get 750 free hours/month of eligible EC2 instances. `c7i-flex.large` is x86 (amd64) and qualifies, making your first month essentially free.
 
+> ⚠️ **`c7i-flex.large` not in the dropdown?** The CloudFormation template may show a limited instance list. Simply **clear the field and type `c7i-flex.large` manually** — CloudFormation accepts it even if not in the dropdown. If the field rejects it, select `t3.medium` as a Free Tier alternative.
+
 > 💡 **Why disable VPC Endpoints?** They add ~$22/month per endpoint for private Bedrock access. For workshops and personal use, the public Bedrock endpoint works perfectly and is HTTPS-encrypted.
 
 ### Click "Create Stack" and wait ~8 minutes
