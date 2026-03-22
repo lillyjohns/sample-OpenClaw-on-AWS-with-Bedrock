@@ -103,6 +103,12 @@ When prompted, select **"AWS Builder ID"** and follow the steps:
 
 > 💡 **Don't have an AWS Builder ID?** It's separate from your AWS account — just an email signup, completely free.
 
+> 💡 **CloudShell not available in your region?** Install Kiro CLI directly on the EC2 instance instead:
+> 1. Go to **EC2 → Instances** → select your instance → **Connect → Session Manager → Connect**
+> 2. Switch to ubuntu user: `sudo -u ubuntu -i`
+> 3. Install Kiro: `curl -fsSL https://cli.kiro.dev/install | bash`
+> 4. Then run `kiro-cli login` as normal
+
 ---
 
 ## Step 4: Configure Telegram via Kiro
