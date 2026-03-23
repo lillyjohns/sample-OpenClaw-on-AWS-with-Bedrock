@@ -11,24 +11,6 @@
 
 > 💡 **Tip:** Create a **fresh AWS account** for the workshop to get the full 12-month Free Tier + Bedrock credits, regardless of your existing account age.
 
----
-
-## ⚠️ Set a Billing Alarm First
-
-Before deploying anything, set a $1 billing alert so you're notified immediately if any charges appear:
-
-1. Go to [Billing Console](https://console.aws.amazon.com/billing/home#/preferences) → enable **"Receive Billing Alerts"** → Save
-2. Open **CloudShell** (top bar `>_` icon) and run:
-
-```bash
-aws budgets create-budget \
-  --account-id $(aws sts get-caller-identity --query Account --output text) \
-  --budget '{"BudgetName":"alert-1usd","BudgetType":"COST","TimeUnit":"MONTHLY","BudgetLimit":{"Amount":"1","Unit":"USD"}}' \
-  --notifications-with-subscribers '[{"Notification":{"NotificationType":"ACTUAL","ComparisonOperator":"GREATER_THAN","Threshold":1},"Subscribers":[{"SubscriptionType":"EMAIL","Address":"YOUR_EMAIL"}]}]'
-```
-
-> This sends an email the moment your charges exceed **$0.01**. Replace `YOUR_EMAIL` with your email address.
-
 > ⚠️ **When using Kiro:** Never press `t` (trust all) — always review each action with `y` or `n`.
 
 > ⚠️ **Delete the stack** when you're done with the workshop to avoid ongoing charges.
@@ -191,6 +173,26 @@ Run all commands as the ubuntu user.
 ```
 
 > 💡 OpenRouter free tier includes models like **Step 3.5 Flash** (Stepfun) at $0 cost — great fallback when Bedrock is throttled.
+
+---
+
+## ⚠️ Set a Billing Alarm
+
+Set a $1 billing alert so you're notified immediately if any charges appear:
+
+1. Go to [Billing Console](https://console.aws.amazon.com/billing/home#/preferences) → enable **"Receive Billing Alerts"** → Save
+2. Run the following command using **Kiro** (paste it in `kiro-cli chat` and let Kiro execute it), or run it in **CloudShell** if available (top bar `>_` icon):
+
+```bash
+aws budgets create-budget \
+  --account-id $(aws sts get-caller-identity --query Account --output text) \
+  --budget '{"BudgetName":"alert-1usd","BudgetType":"COST","TimeUnit":"MONTHLY","BudgetLimit":{"Amount":"1","Unit":"USD"}}' \
+  --notifications-with-subscribers '[{"Notification":{"NotificationType":"ACTUAL","ComparisonOperator":"GREATER_THAN","Threshold":1},"Subscribers":[{"SubscriptionType":"EMAIL","Address":"YOUR_EMAIL"}]}]'
+```
+
+> Replace `YOUR_EMAIL` with your email address. This sends an email the moment your charges exceed **$0.01**.
+
+> 💡 **CloudShell may not be available** in all regions or accounts. If so, ask Kiro to run the command for you — just paste it in your `kiro-cli chat` session with a note like: *"Run this AWS CLI command to create a billing alarm."*
 
 ---
 
