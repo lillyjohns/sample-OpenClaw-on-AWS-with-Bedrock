@@ -93,20 +93,24 @@ Install Kiro CLI on the EC2 instance:
 
 ```bash
 curl -fsSL https://cli.kiro.dev/install | bash
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc && source ~/.bashrc
 ```
 
-Then login with your **AWS Builder ID**:
+> ⚠️ The installer adds `kiro-cli` to `~/.local/bin` which isn't in your PATH by default. The command above adds it to `~/.bashrc` so it persists across sessions.
+
+Then login with your **AWS Builder ID** using device flow (required on headless EC2):
 
 ```bash
-kiro-cli login
+kiro-cli login --use-device-flow
 ```
 
-When prompted, select **"AWS Builder ID"** and follow the steps:
+When prompted, select **"Use for Free with Builder ID"** and follow the steps:
 
-1. A URL will appear — open it in your browser
-2. Sign in with your **AWS Builder ID** (free signup at [profile.aws.amazon.com](https://profile.aws.amazon.com/))
-3. Enter the verification code shown in the terminal
-4. You should see `Login successful`
+1. A URL and a code will appear in the terminal
+2. Open the URL in your **local browser** (laptop/phone)
+3. Sign in with your **AWS Builder ID** (free signup at [profile.aws.amazon.com](https://profile.aws.amazon.com/))
+4. Enter the verification code shown in the terminal
+5. You should see `Login successful`
 
 > 💡 **AWS Builder ID** is separate from your AWS account — just a free email signup.
 
@@ -120,7 +124,7 @@ Start a Kiro chat session:
 kiro-cli chat
 ```
 
-Paste this prompt — replace `<YOUR_BOT_TOKEN>` with your token from BotFather:
+Paste this prompt — replace `<YOUR_BOT_TOKEN>` with your token from BotFather (e.g. `1234567890:ABCdefGHIjklMNOpqrsTUVwxyz`):
 
 ```
 I deployed the CloudFormation stack "openclaw-bedrock" in us-east-1.
@@ -139,9 +143,10 @@ Kiro will configure the Telegram bot automatically. Wait for it to complete.
 3. Back in Kiro, enter:
 
 ```
-Please approve the OpenClaw session with the following details:
-Telegram user ID: <YOUR_USER_ID>
-Pairing code: <YOUR_PAIRING_CODE>
+Approve OpenClaw Telegram pairing. User ID: <YOUR_USER_ID>, Code: <YOUR_PAIRING_CODE>.
+OpenClaw is installed under the ubuntu user via NVM. Run:
+
+sudo -u ubuntu bash -c 'source /home/ubuntu/.nvm/nvm.sh && openclaw pairing approve --channel telegram <PAIRING_CODE> --notify'
 ```
 
 Once approved — your bot is live! 🎉
@@ -176,11 +181,11 @@ It should reply within 10 seconds. ✅
 - Free alternative: use [OpenRouter](https://openrouter.ai) which provides free model access ($0 limit tier)
 
   1. Go to [openrouter.ai](https://openrouter.ai) → Sign up (GitHub or email)
-  2. Go to **Keys** → **Create Key** → copy your `sk-or-v1-xxx` key
-  3. In Kiro, paste this prompt:
+  2. Go to **Keys** → **Create Key** → set **Credit limit** to `0` (for $0 cost control) → copy your key
+  3. In Kiro, paste this prompt (replace `<YOUR_API_KEY>` with your key, e.g. `sk-or-v1-xxx`):
 
 ```
-Add OpenRouter API key sk-or-v1-xxx to ~/.openclaw/openclaw.json as env.OPENROUTER_API_KEY,
+Add OpenRouter API key <YOUR_API_KEY> to ~/.openclaw/openclaw.json as env.OPENROUTER_API_KEY,
 set primary model to openrouter/stepfun/step-3.5-flash:free, then restart the openclaw gateway.
 Run all commands as the ubuntu user.
 ```
